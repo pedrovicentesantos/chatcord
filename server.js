@@ -3,7 +3,7 @@ const http = require('http');
 const express = require('express');
 const socketIO = require('socket.io');
 const { formatMessage } = require('./utils/message');
-const { addUser } = require('./utils/user');
+const { addUser, getUser, removeUser } = require('./utils/user');
 
 const PORT = process.env.PORT || 3000;
 const BOT_NAME = 'ChatCord Bot';
@@ -28,17 +28,23 @@ io.on('connection', socket => {
         'message',
         formatMessage(BOT_NAME, `${user.username} has joined the chat`)
       );
+  });
 
-    socket.on('disconnect', () => {
+  socket.on('chatMessage', msg => {
+    const user = getUser(socket.id);
+
+    io.to(user.room).emit('message', formatMessage(user.username, msg));
+  });
+
+  socket.on('disconnect', () => {
+    const user = removeUser(socket.id);
+
+    if (user) {
       io.to(user.room).emit(
         'message',
         formatMessage(BOT_NAME, `${user.username} was disconnected`)
       );
-    });
-
-    socket.on('chatMessage', msg => {
-      io.to(user.room).emit('message', formatMessage(user.username, msg));
-    });
+    }
   });
 });
 
