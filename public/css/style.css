@@ -33,7 +33,17 @@ a {
   text-decoration: none;
 }
 
-input[type='text']:focus {
+textarea {
+  resize: none;
+  border: none;
+  outline: none;
+  padding: 8px;
+  width: 100%;
+  height: 100%;
+}
+
+input[type='text']:focus,
+textarea:focus {
   outline: none;
 }
 
@@ -109,6 +119,11 @@ input[type='text']:focus {
   margin-bottom: 16px;
   background-color: var(--light-color);
   border-radius: 5px;
+}
+
+.chat-messages .text {
+  white-space: pre-line;
+  overflow-wrap: break-word;
 }
 
 .chat-messages .message .meta {
