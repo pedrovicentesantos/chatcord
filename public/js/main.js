@@ -1,6 +1,7 @@
 const chatForm = document.querySelector('#chat-form');
 const chatMessages = document.querySelector('.chat-messages');
 const roomUsers = document.querySelector('#users');
+const msgTextArea = document.querySelector('#msg');
 
 const socket = io();
 
@@ -31,6 +32,12 @@ chatForm.addEventListener('submit', e => {
 
   e.target.elements.msg.value = '';
   e.target.elements.msg.focus();
+});
+
+msgTextArea.addEventListener('keydown', e => {
+  if (e.keyCode === 13 && e.ctrlKey) {
+    chatForm.dispatchEvent(new Event('submit'));
+  }
 });
 
 const addMessageToDOM = message => {
